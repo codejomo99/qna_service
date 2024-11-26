@@ -345,6 +345,19 @@ public class HomeController {
         return "%d번 게시글을 수정했습니다.".formatted(id);
     }
 
+    @GetMapping("/article/delete/{id}")
+    @ResponseBody
+    public Object deleteArticle(@PathVariable int id){
+        Article article = articles.stream()
+                .filter(a -> a.getId() == id) // 게시물 ID와 내가 입력한 ID 일치하는지 확인
+                .findFirst() // 찾은것중 첫번째
+                .orElse(null); // 아무것도 없으면 null 반환
+
+        articles.remove(article);
+
+        return "%d번 게시글을 삭제했습니다.".formatted(id);
+    }
+
 
 }
 
