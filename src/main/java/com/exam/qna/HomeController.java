@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.ToString;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +27,11 @@ public class HomeController {
 
     public HomeController() {
         increaseNum = -1;
-        articles = new ArrayList<>();
+        articles = new ArrayList<>(){{
+            add(new Article("제목1","내용1"));
+            add(new Article("제목2","내용2"));
+
+        }};
     }
 
     @GetMapping("/qna")
@@ -311,7 +313,7 @@ public class HomeController {
 
     @GetMapping("/article/detail/{id}")
     @ResponseBody
-    public Article getArticle(@PathVariable int id){
+    public Object getArticle(@PathVariable int id){
         Article article = articles.stream()
                 .filter(a -> a.getId() == id) // 게시물 ID와 내가 입력한 ID 일치하는지 확인
                 .findFirst() // 찾은것중 첫번째
@@ -321,6 +323,27 @@ public class HomeController {
         return article;
     }
 
+    @GetMapping("/article/modify/{id}")
+    @ResponseBody
+    public Object updateArticle(@PathVariable int id, String title, String body){
+        Article article = articles.stream()
+                .filter(a -> a.getId() == id) // 게시물 ID와 내가 입력한 ID 일치하는지 확인
+                .findFirst() // 찾은것중 첫번째
+                .orElse(null); // 아무것도 없으면 null 반환
+
+        // 간단한 유효성 검사
+        if(title == null) {
+            return "제목을 입력해주세요.";
+        }
+        if(body == null){
+            return "내용물을 입력해주세요.";
+        }
+
+        article.setTitle(title);
+        article.setBody(body);
+
+        return "%d번 게시글을 수정했습니다.".formatted(id);
+    }
 
 
 }
@@ -339,8 +362,7 @@ class Animal {
 
 
 @AllArgsConstructor
-@Getter
-@ToString
+@Data
 class Article {
     private static int lastId;
     private final int id;
