@@ -3,6 +3,7 @@ package com.exam.qna;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -131,5 +132,27 @@ public class HomeController {
         return rs;
     }
 
+
+
+    // 세션을 이용해서 값을 저장하기
+    @GetMapping("/test/saveSession/{name}/{value}")
+    @ResponseBody
+    public String saveSession(@PathVariable String name, @PathVariable String value, HttpServletRequest req) {
+        HttpSession session = req.getSession();
+
+        // req = > 쿠키 = > JESSIONID => 세션을 얻을 수 있다.
+
+        session.setAttribute(name,value);
+
+        return "세션 변수 %s의 값이 %s(으)로 설정되었습니다.".formatted(name,value);
+    }
+
+    @GetMapping("/test/getSession/{name}")
+    @ResponseBody
+    public String getSession(@PathVariable String name, HttpSession session){
+        String value = (String) session.getAttribute(name);
+
+        return "세션 변수의 %s의 값이 %s입니다.".formatted(name,value);
+    }
 
 }
