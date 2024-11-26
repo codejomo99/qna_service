@@ -67,8 +67,6 @@ public class HomeController {
         return a + b;
     }
 
-
-
     // 함수안에 지역변수로 두면 함수 생성주기로 값이 초기화 되기 때문에
     // 전역변수로 둬 호출될때마다 값이 증가하게 해준다.
 
@@ -82,6 +80,21 @@ public class HomeController {
     public int increase(){
         increaseNum++;
         return increaseNum;
+    }
+
+    @GetMapping("/test/gugudan")
+    @ResponseBody
+    public String gugudan(Integer dan, Integer limit){
+
+        String result = "";
+
+        if(dan == null) dan = 9;
+        if(limit == null) limit = 9;
+
+        for(int i = 1; i <= limit; i++){
+            result += "%d * %d = %d<br>".formatted(dan,i,dan*i);
+        }
+        return result;
     }
 
 
