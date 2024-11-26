@@ -59,5 +59,30 @@ public class HomeController {
                 """.formatted(age);
     }
 
+    // http://localhost:8080/test/plus?a=1&b=13
+    // GET 요청으로 14가 나온다.
+    @GetMapping("/test/plus")
+    @ResponseBody
+    public int plus(@RequestParam(defaultValue = "0") int a, @RequestParam(defaultValue = "0")  int b){
+        return a + b;
+    }
+
+
+
+    // 함수안에 지역변수로 두면 함수 생성주기로 값이 초기화 되기 때문에
+    // 전역변수로 둬 호출될때마다 값이 증가하게 해준다.
+
+    private int increaseNum;
+    public HomeController(){
+        increaseNum = -1;
+    }
+
+    @GetMapping("/test/increase")
+    @ResponseBody
+    public int increase(){
+        increaseNum++;
+        return increaseNum;
+    }
+
 
 }
