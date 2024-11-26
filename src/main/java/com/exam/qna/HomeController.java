@@ -1,6 +1,9 @@
 package com.exam.qna;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +41,9 @@ public class HomeController {
                 """;
     }
 
+    // RequestParam defaultValue 를 통해 0 값의 오류를 막는다.
+    // http://localhost:8080/test/page2?age=10 -(GET)
+    // http://localhost:8080/test/page2 -(POST)
     @GetMapping("/test/page2")
     @ResponseBody
     public String showPageGet(@RequestParam(defaultValue = "0") int age) {
@@ -47,9 +53,6 @@ public class HomeController {
                 """.formatted(age);
     }
 
-    // RequestParam defaultValue 를 통해 0 값의 오류를 막는다.
-    // http://localhost:8080/test/page2?age=10 -(GET)
-    // http://localhost:8080/test/page2 -(POST)
     @PostMapping("/test/page2")
     @ResponseBody
     public String showPagePost(@RequestParam(defaultValue = "0") int age) {
@@ -67,9 +70,20 @@ public class HomeController {
         return a + b;
     }
 
+    // 서블릿 방식으로 값을 받아오는 법
+    @GetMapping("/test/plus2")
+    @ResponseBody
+    public void plusServlet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int a = Integer.parseInt(req.getParameter("a"));
+        int b = Integer.parseInt(req.getParameter("b"));
+        resp.getWriter().append(a+b+"");
+    }
+
+
+
+
     // 함수안에 지역변수로 두면 함수 생성주기로 값이 초기화 되기 때문에
     // 전역변수로 둬 호출될때마다 값이 증가하게 해준다.
-
     private int increaseNum;
     public HomeController(){
         increaseNum = -1;
