@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -109,6 +110,25 @@ public class HomeController {
             result += "%d * %d = %d<br>".formatted(dan,i,dan*i);
         }
         return result;
+    }
+
+
+    // http://localhost:8080/test/mbti/이름
+    // PathVariable 사용법
+    // switch 문을 변수에 담아서 사용 가능.
+    @GetMapping("/test/mbti/{name}")
+    @ResponseBody
+    public String showMbti(@PathVariable String name){
+        String rs = switch (name){
+            case "홍길동" -> "INFP";
+            case "김하늘" -> "ENFP";
+            case "박종민" -> "INTJ";
+            case "이진성" -> "INFP";
+
+            default -> "모릅니다.";
+        };
+
+        return rs;
     }
 
 
