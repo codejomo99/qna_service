@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -358,6 +359,13 @@ public class HomeController {
         return "%d번 게시글을 삭제했습니다.".formatted(id);
     }
 
+    // action 에서 스프링부트에 의해서 자동으로 조립된 객체 입력받을 수 있다.
+    @GetMapping("/addPerson")
+    @ResponseBody
+    public Object showPerson(Person p){
+        return p;
+    }
+
 
 }
 
@@ -389,4 +397,12 @@ class Article {
     public Article(String title, String body){
         this(++lastId, title, body); // 메서드 오버로딩
     }
+}
+
+@AllArgsConstructor
+@Getter
+class Person{
+    private int id;
+    private int age;
+    private String name;
 }
