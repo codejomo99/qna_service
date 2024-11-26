@@ -5,6 +5,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -155,4 +161,143 @@ public class HomeController {
         return "세션 변수의 %s의 값이 %s입니다.".formatted(name,value);
     }
 
+    /**
+     데이터 반환 타입과 메서드 공부
+     **/
+
+    @GetMapping("/test/returnBoolean")
+    @ResponseBody
+    public boolean showBoolean(){
+        return false;
+    }
+    @GetMapping("/test/returnDouble")
+    @ResponseBody
+    public double showDouble(){
+        return Math.random();
+    }
+
+    @GetMapping("/test/returnIntArr")
+    @ResponseBody
+    public int[] showIntArr(){
+        int[] arr = {1,3,5};
+
+        return arr;
+    }
+
+    @GetMapping("/test/returnStringList")
+    @ResponseBody
+    public List<String> showStringList(){
+        List<String> list = new ArrayList<>(){{
+            add("안녕");
+            add("테스트");
+            add("입니다");
+        }};
+
+        return list;
+    }
+
+
+
+    @GetMapping("/test/returnMap")
+    @ResponseBody
+    public Map<String, Object> showMap(){
+       Map<String, Object> map = new LinkedHashMap<>(){{
+            put("id",1);
+            put("age",5);
+            put("name","푸바오");
+            put("list",new ArrayList<>(){{
+                add(2);
+                add(3);
+                add(4);
+            }});
+       }};
+
+
+       return map;
+    }
+
+
+
+    @GetMapping("/test/returnAnimal")
+    @ResponseBody
+    public Animal showAnimal(){
+        Animal animal = new Animal(1,3,"도니",new ArrayList<>(){{
+            add(2);
+            add(3);
+            add(4);
+        }});
+
+        return animal;
+    }
+
+    @GetMapping("/test/returnAnimalMapList")
+    @ResponseBody
+    public List<Map<String, Object>> showAnimalMap(){
+        Map<String, Object> map1 = new LinkedHashMap<>(){{
+            put("id",1);
+            put("age",5);
+            put("name","푸바오");
+            put("list",new ArrayList<>(){{
+                add(2);
+                add(3);
+                add(4);
+            }});
+        }};
+
+        Map<String, Object> map2 = new LinkedHashMap<>(){{
+            put("id",2);
+            put("age",11);
+            put("name","도니");
+            put("list",new ArrayList<>(){{
+                add(5);
+                add(6);
+                add(7);
+            }});
+        }};
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        list.add(map1);
+        list.add(map2);
+
+        return list;
+
+    }
+
+    @GetMapping("/test/returnAnimalList")
+    @ResponseBody
+    public List<Animal> showAnimalList(){
+
+        Animal animal1 = new Animal(1,3,"도니",new ArrayList<>(){{
+            add(2);
+            add(3);
+            add(4);
+        }});
+
+        Animal animal2 = new Animal(2,14,"흰둥이",new ArrayList<>(){{
+            add(2);
+            add(3);
+            add(4);
+        }});
+
+        List<Animal> list = new ArrayList<>(){{
+            add(animal1);
+            add(animal2);
+        }};
+
+        return list;
+    }
+
+
+}
+
+// 생성자만들어준다
+@AllArgsConstructor
+@Data
+class Animal{
+    private final int id;
+    private final int age;
+
+    private String name;
+
+    private final List<Integer> list;
 }
