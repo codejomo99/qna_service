@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.exam.qna.entity.Question;
 import com.exam.qna.repository.QuestionRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,12 @@ class QnaApplicationTests {
 	private QuestionRepository questionRepository;
 
 	@Test
-	void testJpa() {
+	void testJpa(){
+		questionRepository.truncate();
+	}
+
+	@Test
+	void testJpa1() {
 		Question q1 = new Question();
 		q1.setSubject("이게 무엇인가요?");
 		q1.setContent("이것에 대해서 알고 싶습니다.");
@@ -53,6 +59,32 @@ class QnaApplicationTests {
 		List<Question> list = questionRepository.findBySubjectLike("이게%");
 		Question q = list.get(0);
 		assertEquals("이게 무엇인가요?",q.getSubject());
+	}
+
+	@Test
+	void testJpa5(){
+		Question q = questionRepository.findBySubject("이게 무엇인가요?");
+		questionRepository.delete(q);
+
+		List<Question> list = questionRepository.findAll();
+		assertEquals(1,list.size());
+	}
+
+	@Test
+	@Transactional
+	void testJpa6(){
+
+		Question q = new Question();
+		q.setContent("안녕하세요");
+		q.setSubject("반갑습니다");
+
+		questionRepository.save(q);
+
+		Question find = questionRepository.findBySubject("반갑습니다");
+		questionRepository.delete(find);
+
+		List<Question> list = questionRepository.findAll();
+		assertEquals(0,list.size());
 	}
 
 }
