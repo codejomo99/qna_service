@@ -48,4 +48,11 @@ class QnaApplicationTests {
 		assertEquals(1,q.getId());
 	}
 
+	@Test
+	void testJpa4(){
+		List<Question> list = questionRepository.findBySubjectLike("이게%");
+		Question q = list.get(0);
+		assertEquals("이게 무엇인가요?",q.getSubject());
+	}
+
 }
