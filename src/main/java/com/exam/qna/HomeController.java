@@ -12,11 +12,8 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -363,9 +360,9 @@ public class HomeController {
     }
 
     // action 에서 스프링부트에 의해서 자동으로 조립된 객체 입력받을 수 있다.
-    @GetMapping("/addPerson/{id}")
+    @GetMapping("/addPerson")
     @ResponseBody
-    public Object showPerson(@ModelAttribute Person p){
+    public Object showPerson(Person p){
         return p;
     }
 
@@ -403,17 +400,9 @@ class Article {
 }
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
 class Person{
     private int id;
     private int age;
     private String name;
-
-
-    public Person(int age, String name){
-        this.age = age;
-        this.name = name;
-    }
 }

@@ -1,3 +1,0 @@
-1732777646870|4|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/qna|SELECT @@character_set_database, @@sql_mode|SELECT @@character_set_database, @@sql_mode
-1732777648073|5|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/qna|select * from `qna`.`question` where 1=0|select * from `qna`.`question` where 1=0
-1732777650118|1|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/qna|select q1_0.id,q1_0.content,q1_0.create_date,q1_0.subject from question q1_0 where q1_0.subject like ? escape '\\'|select q1_0.id,q1_0.content,q1_0.create_date,q1_0.subject from question q1_0 where q1_0.subject like '이게%' escape '\\'
