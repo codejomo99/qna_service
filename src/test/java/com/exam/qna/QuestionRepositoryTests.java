@@ -27,25 +27,35 @@ public class QuestionRepositoryTests {
         createSampleData();
     }
 
-    void createSampleData() {
+    public static int createSampleData(QuestionRepository questionRepository) {
         Question q1 = new Question();
         q1.setSubject("이게 무엇인가요?");
         q1.setContent("이것에 대해서 알고 싶습니다.");
         q1.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q1);  // 첫번째 질문 저장
+        questionRepository.save(q1);  // 첫번째 질문 저장
 
         Question q2 = new Question();
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
         q2.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q2);  // 두번째 질문 저장
+        questionRepository.save(q2);  // 두번째 질문 저장
 
-        lastSampleDataId = q2.getId();
+        return q2.getId();
+    }
 
-
+    void createSampleData() {
+        lastSampleDataId =  createSampleData(questionRepository);
     }
 
     void clearData() {
+        questionRepository.disableForeignKeyChecks();
+        // 초기화
+        questionRepository.truncate();
+        // 외래키를 다시 만든다
+        questionRepository.enableForeignKeyChecks();
+    }
+
+    public static void clearData(QuestionRepository questionRepository) {
         questionRepository.disableForeignKeyChecks();
         // 초기화
         questionRepository.truncate();
