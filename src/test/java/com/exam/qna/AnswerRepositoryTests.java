@@ -23,8 +23,6 @@ class AnswerRepositoryTests {
     private QuestionRepository questionRepository;
 
 
-    private static int lastSampleDataId;
-
     @BeforeEach
     void beforeEach() {
         clearData();
@@ -32,17 +30,24 @@ class AnswerRepositoryTests {
     }
 
     void createSampleData() {
-        QuestionRepositoryTests.createSampleData(questionRepository);
+        int questId = QuestionRepositoryTests.createSampleData(questionRepository);
+        Question q = questionRepository.findById(questId).get();
+
+        Answer a = new Answer();
+        a.setContent("저도 잘 몰라요");
+        a.setCreateDate(LocalDateTime.now());
+        a.setQuestion(q);
+        answerRepository.save(a);
     }
 
     void clearData() {
         QuestionRepositoryTests.clearData(questionRepository);
         // 질문 외래키 삭제
-        questionRepository.disableForeignKeyChecks();
+        answerRepository.disableForeignKeyChecks();
         // 답변 초기화
         answerRepository.truncate();
         // 질문 외래키 다시 만든다
-        questionRepository.enableForeignKeyChecks();
+        answerRepository.enableForeignKeyChecks();
     }
 
     // save
@@ -52,12 +57,12 @@ class AnswerRepositoryTests {
         Question q = questionRepository.findById(2).get();
 
         Answer a = new Answer();
-        a.setContent("저도 잘 몰라요");
+        a.setContent("음..그러게요");
         a.setCreateDate(LocalDateTime.now());
         a.setQuestion(q);
         answerRepository.save(a);
 
-        assertThat(a.getId()).isEqualTo(lastSampleDataId + 1);
+        assertThat(a.getId()).isEqualTo( 2);
         assertThat(a.getQuestion().getId()).isEqualTo(2);
 
     }
@@ -66,7 +71,7 @@ class AnswerRepositoryTests {
     @Test
     void update() {
 
-        Answer a = answerRepository.findById(lastSampleDataId).get();
+        Answer a = answerRepository.findById(1).get();
         a.setContent("답변이 수정되었습니다.");
         answerRepository.save(a);
 
@@ -76,12 +81,12 @@ class AnswerRepositoryTests {
     // delete
     @Test
     void delete() {
-        assertThat(answerRepository.count()).isEqualTo(lastSampleDataId);
+        assertThat(answerRepository.count()).isEqualTo(1);
 
-        Answer q = answerRepository.findById(lastSampleDataId).get();
+        Answer q = answerRepository.findById(1).get();
 
         answerRepository.delete(q);
-        assertEquals(lastSampleDataId - 1, answerRepository.count());
+        assertEquals(0, answerRepository.count());
 
     }
 
