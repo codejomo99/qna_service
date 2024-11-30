@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface AnswerRepository extends JpaRepository<Answer,Integer>, RepositoryUtil {
     @Transactional
     @Modifying
-    @Query(value = "TRUNCATE TABLE answer", nativeQuery = true)
+    @Query(value = "ALTER TABLE answer AUTO_INCREMENT = 1;", nativeQuery = true)
     void truncate();
-
-
 }

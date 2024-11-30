@@ -43,11 +43,13 @@ class AnswerRepositoryTests {
     void clearData() {
         QuestionRepositoryTests.clearData(questionRepository);
         // 질문 외래키 삭제
-        answerRepository.disableForeignKeyChecks();
+        //answerRepository.disableForeignKeyChecks();
+        // Delete -> ALTER TABLE answer AUTO_INCREMENT = 1; 바꾼다.
+        answerRepository.deleteAll();
         // 답변 초기화
         answerRepository.truncate();
         // 질문 외래키 다시 만든다
-        answerRepository.enableForeignKeyChecks();
+        //answerRepository.enableForeignKeyChecks();
     }
 
     // save
@@ -61,7 +63,6 @@ class AnswerRepositoryTests {
         a.setCreateDate(LocalDateTime.now());
         a.setQuestion(q);
         answerRepository.save(a);
-
         assertThat(a.getId()).isEqualTo( 2);
         assertThat(a.getQuestion().getId()).isEqualTo(2);
 
@@ -88,6 +89,13 @@ class AnswerRepositoryTests {
         answerRepository.delete(q);
         assertEquals(0, answerRepository.count());
 
+    }
+
+    @Test
+    void find(){
+        Answer a  = answerRepository.findById(1).get();
+
+        assertThat(a.getContent()).isEqualTo("저도 잘 몰라요");
     }
 
 

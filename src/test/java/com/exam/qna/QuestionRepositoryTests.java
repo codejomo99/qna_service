@@ -19,12 +19,13 @@ public class QuestionRepositoryTests {
     @Autowired
     private QuestionRepository questionRepository;
 
+
     private static int lastSampleDataId;
 
     @BeforeEach
     void beforeEach(){
-        clearData();
-        createSampleData();
+        QuestionRepositoryTests.clearData(questionRepository);
+        QuestionRepositoryTests.createSampleData(questionRepository);
     }
 
     public static int createSampleData(QuestionRepository questionRepository) {
@@ -40,27 +41,18 @@ public class QuestionRepositoryTests {
         q2.setCreateDate(LocalDateTime.now());
         questionRepository.save(q2);  // 두번째 질문 저장
 
-        return q2.getId();
+        return lastSampleDataId = q2.getId();
     }
 
-    void createSampleData() {
-        lastSampleDataId =  createSampleData(questionRepository);
-    }
-
-    void clearData() {
-        questionRepository.disableForeignKeyChecks();
-        // 초기화
-        questionRepository.truncate();
-        // 외래키를 다시 만든다
-        questionRepository.enableForeignKeyChecks();
-    }
-
+    // 전역으로 사용 할 수 있는 static
     public static void clearData(QuestionRepository questionRepository) {
-        questionRepository.disableForeignKeyChecks();
+        //questionRepository.disableForeignKeyChecks();
+        // delete -> ALTER TABLE question AUTO_INCREMENT = 1; 바꾼다.
+        questionRepository.deleteAll();
         // 초기화
         questionRepository.truncate();
         // 외래키를 다시 만든다
-        questionRepository.enableForeignKeyChecks();
+       // questionRepository.enableForeignKeyChecks();
     }
 
     // save
