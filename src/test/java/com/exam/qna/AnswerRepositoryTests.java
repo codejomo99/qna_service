@@ -1,0 +1,124 @@
+package com.exam.qna;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.exam.qna.entity.Answer;
+import com.exam.qna.entity.Question;
+import com.exam.qna.repository.AnswerRepository;
+import com.exam.qna.repository.QuestionRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class AnswerRepositoryTests {
+
+    @Autowired
+    private AnswerRepository answerRepository;
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+
+    @BeforeEach
+    void beforeEach() {
+        clearData();
+        createSampleData();
+    }
+
+    void createSampleData() {
+        int questId = QuestionRepositoryTests.createSampleData(questionRepository);
+        Question q = questionRepository.findById(questId).get();
+
+        Answer a = new Answer();
+        a.setContent("저도 잘 몰라요");
+        a.setCreateDate(LocalDateTime.now());
+        a.setQuestion(q);
+        answerRepository.save(a);
+    }
+
+    void clearData() {
+        QuestionRepositoryTests.clearData(questionRepository);
+        // 질문 외래키 삭제
+        //answerRepository.disableForeignKeyChecks();
+        // Delete -> ALTER TABLE answer AUTO_INCREMENT = 1; 바꾼다.
+        answerRepository.deleteAll();
+        // 답변 초기화
+        answerRepository.truncate();
+        // 질문 외래키 다시 만든다
+        //answerRepository.enableForeignKeyChecks();
+    }
+
+    // save
+    @Test
+    void save() {
+
+        Question q = questionRepository.findById(2).get();
+
+        Answer a = new Answer();
+        a.setContent("음..그러게요");
+        a.setCreateDate(LocalDateTime.now());
+        a.setQuestion(q);
+        answerRepository.save(a);
+        assertThat(a.getId()).isEqualTo( 2);
+        assertThat(a.getQuestion().getId()).isEqualTo(2);
+
+    }
+
+    // update
+    @Test
+    void update() {
+
+        Answer a = answerRepository.findById(1).get();
+        a.setContent("답변이 수정되었습니다.");
+        answerRepository.save(a);
+
+        assertThat(a.getContent()).isEqualTo("답변이 수정되었습니다.");
+    }
+
+    // delete
+    @Test
+    void delete() {
+        assertThat(answerRepository.count()).isEqualTo(1);
+
+        Answer q = answerRepository.findById(1).get();
+
+        answerRepository.delete(q);
+        assertEquals(0, answerRepository.count());
+
+    }
+
+    @Test
+    void find(){
+        Answer a  = answerRepository.findById(1).get();
+
+        assertThat(a.getContent()).isEqualTo("저도 잘 몰라요");
+    }
+
+
+    // 답변을 가져올 때는 관련된 질문도 같이 가져와진다.
+    @Test
+    void relationFind(){
+
+        // 질문으로 부터 답변을 찾는다.
+        Answer a  = answerRepository.findById(1).get();
+        Question q = a.getQuestion();
+
+        assertThat(q.getId()).isEqualTo(2);
+
+        // 질문으로 부터 답변들을 찾는다.
+        // select * from question where id = 1;
+        // Question은 OneToMany 로 fetch 가 lazy 되어 있어서 불가능 -> eager 로 바꿔서 할 수 있다.
+        Question q1 = questionRepository.findById(2).get();
+        // select * from answer where question_id = 2;
+        List<Answer> a1 = q1.getAnswerList();
+
+        assertThat(a1.size()).isEqualTo(1);
+        assertThat(a1.get(0).getContent()).isEqualTo("저도 잘 몰라요");
+    }
+
+}
