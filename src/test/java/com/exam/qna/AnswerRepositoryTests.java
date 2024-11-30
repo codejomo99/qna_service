@@ -8,6 +8,7 @@ import com.exam.qna.entity.Question;
 import com.exam.qna.repository.AnswerRepository;
 import com.exam.qna.repository.QuestionRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +99,26 @@ class AnswerRepositoryTests {
         assertThat(a.getContent()).isEqualTo("저도 잘 몰라요");
     }
 
+
+    // 답변을 가져올 때는 관련된 질문도 같이 가져와진다.
+    @Test
+    void relationFind(){
+
+        // 질문으로 부터 답변을 찾는다.
+        Answer a  = answerRepository.findById(1).get();
+        Question q = a.getQuestion();
+
+        assertThat(q.getId()).isEqualTo(2);
+
+        // 질문으로 부터 답변들을 찾는다.
+        // select * from question where id = 1;
+        // Question은 OneToMany 로 fetch 가 lazy 되어 있어서 불가능 -> eager 로 바꿔서 할 수 있다.
+        Question q1 = questionRepository.findById(2).get();
+        // select * from answer where question_id = 2;
+        List<Answer> a1 = q1.getAnswerList();
+
+        assertThat(a1.size()).isEqualTo(1);
+        assertThat(a1.get(0).getContent()).isEqualTo("저도 잘 몰라요");
+    }
 
 }
