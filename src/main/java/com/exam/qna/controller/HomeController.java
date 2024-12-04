@@ -1,4 +1,4 @@
-package com.exam.qna;
+package com.exam.qna.controller;
 
 
 import jakarta.servlet.http.HttpServletRequest;
