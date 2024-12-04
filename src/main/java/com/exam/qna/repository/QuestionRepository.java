@@ -9,16 +9,27 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Question,  Integer>, RepositoryUtil {
+public interface QuestionRepository extends JpaRepository<Question,  Integer> {
 
 
 
     @Transactional
     @Modifying
-    @Query(value = "ALTER TABLE question AUTO_INCREMENT = 1;", nativeQuery = true)
+    @Query(value = "TRUNCATE TABLE question", nativeQuery = true)
     void truncate();
 
     Question findBySubject(String s);
 
     List<Question> findBySubjectLike(String s);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "SET FOREIGN_KEY_CHECKS = 0", nativeQuery = true)
+    void disableForeignKeyChecks();
+
+    @Transactional
+    @Modifying
+    @Query(value = "SET FOREIGN_KEY_CHECKS = 1", nativeQuery = true)
+    void enableForeignKeyChecks();
 }

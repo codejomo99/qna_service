@@ -1,4 +1,4 @@
-package com.exam.qna.controller;
+package com.exam.qna;
 
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -93,6 +93,7 @@ public class HomeController {
     public int plus(@RequestParam(defaultValue = "0") int a, @RequestParam(defaultValue = "0") int b) {
         return a + b;
     }
+
     // 서블릿 방식으로 값을 받아오는 법
     @GetMapping("/test/plus2")
     @ResponseBody
