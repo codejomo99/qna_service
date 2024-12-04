@@ -7,12 +7,14 @@ import com.exam.qna.entity.Answer;
 import com.exam.qna.entity.Question;
 import com.exam.qna.repository.AnswerRepository;
 import com.exam.qna.repository.QuestionRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 
 @SpringBootTest
 class AnswerRepositoryTests {
@@ -39,6 +41,19 @@ class AnswerRepositoryTests {
         a.setCreateDate(LocalDateTime.now());
         a.setQuestion(q);
         answerRepository.save(a);
+
+        // 답변객체를 질문에 담아준다. (양방향 관계)
+        q.getAnswerList().add(a);
+
+
+        Answer a1 = new Answer();
+        a1.setContent("아 저는 알아요");
+        a1.setCreateDate(LocalDateTime.now());
+        a1.setQuestion(q);
+        answerRepository.save(a1);
+
+        // 답변객체를 질문에 담아준다. (양방향 관계)
+        q.getAnswerList().add(a1);
     }
 
     void clearData() {
@@ -102,23 +117,33 @@ class AnswerRepositoryTests {
 
     // 답변을 가져올 때는 관련된 질문도 같이 가져와진다.
     @Test
-    void relationFind(){
+    void answer으로부터_관련된_질문_조회(){
 
-        // 질문으로 부터 답변을 찾는다.
+        // 답변으로 부터 질문을 찾는다.
         Answer a  = answerRepository.findById(1).get();
         Question q = a.getQuestion();
 
         assertThat(q.getId()).isEqualTo(2);
+    }
 
-        // 질문으로 부터 답변들을 찾는다.
-        // select * from question where id = 1;
-        // Question은 OneToMany 로 fetch 가 lazy 되어 있어서 불가능 -> eager 로 바꿔서 할 수 있다.
-        Question q1 = questionRepository.findById(2).get();
-        // select * from answer where question_id = 2;
-        List<Answer> a1 = q1.getAnswerList();
+    /**
+     동일 트렌잭션 안에서는 내에서는 동일 객체가 반환된다.
+     **/
 
-        assertThat(a1.size()).isEqualTo(1);
-        assertThat(a1.get(0).getContent()).isEqualTo("저도 잘 몰라요");
+    @Test
+    @Transactional // beforeEach 까지 실행
+    @Rollback(value = false)
+    void question으로부터_관련된_답변들_조회(){
+
+        // Error : failed to lazily initialize a collection of role
+        Question q = questionRepository.findById(2).get();
+        // 중간에 Question DB 연결이 끊킨다.
+
+
+        List<Answer> answerList = q.getAnswerList();
+
+        assertThat(answerList.size()).isEqualTo(2);
+        assertThat(answerList.get(0).getContent()).isEqualTo("저도 잘 몰라요");
     }
 
 }
