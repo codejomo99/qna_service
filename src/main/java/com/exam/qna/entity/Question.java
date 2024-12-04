@@ -28,7 +28,9 @@ public class Question {
     private String content;
     private LocalDateTime createDate;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+
+    // ALL : 부모엔티티에 관련된 데이터가 저장될때 자식 엔티티도 저장을 할까 ?
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.REMOVE, CascadeType.ALL})
     private List<Answer> answerList = new ArrayList<>();
 
     public void addAnswer(Answer answer){

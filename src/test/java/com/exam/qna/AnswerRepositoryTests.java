@@ -80,6 +80,7 @@ class AnswerRepositoryTests {
         a.setCreateDate(LocalDateTime.now());
         q.addAnswer(a);
 
+        // CascadeType.ALL 을 적용해서 조금 더 객체지향적으로
         questionRepository.save(q);
     }
 
