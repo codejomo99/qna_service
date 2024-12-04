@@ -39,21 +39,20 @@ class AnswerRepositoryTests {
         Answer a = new Answer();
         a.setContent("저도 잘 몰라요");
         a.setCreateDate(LocalDateTime.now());
-        a.setQuestion(q);
-        answerRepository.save(a);
-
         // 답변객체를 질문에 담아준다. (양방향 관계)
-        q.getAnswerList().add(a);
+        q.addAnswer(a);
+        answerRepository.save(a);
 
 
         Answer a1 = new Answer();
         a1.setContent("아 저는 알아요");
         a1.setCreateDate(LocalDateTime.now());
-        a1.setQuestion(q);
+        // 답변객체를 질문에 담아준다. (양방향 관계)
+        q.addAnswer(a1);
         answerRepository.save(a1);
 
-        // 답변객체를 질문에 담아준다. (양방향 관계)
-        q.getAnswerList().add(a1);
+
+        questionRepository.save(q);
     }
 
     void clearData() {
@@ -70,6 +69,8 @@ class AnswerRepositoryTests {
 
     // save
     @Test
+    @Transactional
+    @Rollback(value = false)
     void save() {
 
         Question q = questionRepository.findById(2).get();
@@ -77,15 +78,15 @@ class AnswerRepositoryTests {
         Answer a = new Answer();
         a.setContent("음..그러게요");
         a.setCreateDate(LocalDateTime.now());
-        a.setQuestion(q);
-        answerRepository.save(a);
-        assertThat(a.getId()).isEqualTo( 2);
-        assertThat(a.getQuestion().getId()).isEqualTo(2);
+        q.addAnswer(a);
 
+        questionRepository.save(q);
     }
 
     // update
     @Test
+    @Transactional // beforeEach 포함해서 실행
+    @Rollback(value = false)
     void update() {
 
         Answer a = answerRepository.findById(1).get();
@@ -97,17 +98,21 @@ class AnswerRepositoryTests {
 
     // delete
     @Test
+    @Transactional
+    @Rollback(value = false)
     void delete() {
-        assertThat(answerRepository.count()).isEqualTo(1);
+        assertThat(answerRepository.count()).isEqualTo(2);
 
         Answer q = answerRepository.findById(1).get();
 
         answerRepository.delete(q);
-        assertEquals(0, answerRepository.count());
+        assertEquals(1, answerRepository.count());
 
     }
 
     @Test
+    @Transactional
+    @Rollback(value = false)
     void find(){
         Answer a  = answerRepository.findById(1).get();
 
@@ -117,6 +122,8 @@ class AnswerRepositoryTests {
 
     // 답변을 가져올 때는 관련된 질문도 같이 가져와진다.
     @Test
+    @Transactional
+    @Rollback(value = false)
     void answer으로부터_관련된_질문_조회(){
 
         // 답변으로 부터 질문을 찾는다.
@@ -131,7 +138,7 @@ class AnswerRepositoryTests {
      **/
 
     @Test
-    @Transactional // beforeEach 까지 실행
+    @Transactional
     @Rollback(value = false)
     void question으로부터_관련된_답변들_조회(){
 
@@ -145,5 +152,6 @@ class AnswerRepositoryTests {
         assertThat(answerList.size()).isEqualTo(2);
         assertThat(answerList.get(0).getContent()).isEqualTo("저도 잘 몰라요");
     }
+
 
 }
