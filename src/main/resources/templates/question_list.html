@@ -16,7 +16,9 @@
         <!-- [[${loop.index}]] / [[${loop.size}]]-->
             [[${loop.count}]]
         </td>
-        <td>[[${question.subject}]]</td>
+        <td>
+            <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+        </td>
         <!-- loop 방식 -->
         <!--  | 안에 |  이 사이에서는 바로 출력이 된다 !!!-->
         <td>
