@@ -20,6 +20,9 @@ public class AnswerService {
         answer.setCreateDate(LocalDateTime.now());
         answer.setQuestion(question);
 
+        // 양방향을 위한
+        question.addAnswer(answer);
+
         answerRepository.save(answer);
     }
 
