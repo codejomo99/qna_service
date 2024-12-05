@@ -8,14 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/question")
 @RequiredArgsConstructor // 생성자 주입
 public class QuestionController {
 
     // @Autowired // <- 필드 주입
     private final QuestionService questionService;
-    @GetMapping("/question/list")
+    @GetMapping("/list")
     public String list(Model model){
         List<Question> questionsList = questionService.getList();
 
@@ -27,7 +29,7 @@ public class QuestionController {
         return "question_list";
     }
 
-    @GetMapping("/question/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable int id){
         Question question = questionService.getQuestion(id);
 
