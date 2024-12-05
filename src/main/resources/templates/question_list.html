@@ -1,5 +1,7 @@
 <h2>질문 리스트</h2>
 
+
+
 <table border="1">
     <thead>
     <tr>
@@ -9,12 +11,21 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="question : ${questionList}">
+    <tr th:each="question, loop : ${questionList}">
         <td>
-            <span th:text="${question.id}"></span>번
+        <!-- [[${loop.index}]] / [[${loop.size}]]-->
+            [[${loop.count}]]
         </td>
-        <td th:text="${question.subject}"></td>
-        <td th:text="${question.createDate}"></td>
+        <td>[[${question.subject}]]</td>
+        <!-- loop 방식 -->
+        <!--  | 안에 |  이 사이에서는 바로 출력이 된다 !!!-->
+        <td>
+            [[|${#strings.substring(question.createDate,2,10)}분|]]
+        </td>
+        <!-- th 방식 -->
+        <!--  <td th:text = "${#strings.substring(question.createDate,2,10)}"></td> -->
+
+
     </tr>
     </tbody>
 </table>
