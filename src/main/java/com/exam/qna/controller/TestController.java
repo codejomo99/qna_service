@@ -1,4 +1,4 @@
-package com.exam.qna;
+package com.exam.qna.controller;
 
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class HomeController {
+public class TestController {
 
     private int increaseNum;
     private List<Article> articles;
 
-    public HomeController() {
+    public TestController() {
         increaseNum = -1;
         articles = new ArrayList<>(){{
             add(new Article("제목1","내용1"));
@@ -93,7 +93,6 @@ public class HomeController {
     public int plus(@RequestParam(defaultValue = "0") int a, @RequestParam(defaultValue = "0") int b) {
         return a + b;
     }
-
     // 서블릿 방식으로 값을 받아오는 법
     @GetMapping("/test/plus2")
     @ResponseBody

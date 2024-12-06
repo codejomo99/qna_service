@@ -1,0 +1,22 @@
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+<h2 th:text="|제목 : ${question.subject}|"></h2>
+<div th:text="|날짜 : ${#temporals.format(question.createDate,'yyyy-MM-dd')}|"></div>
+<div th:text="|내용 : ${question.content}|"></div>
+
+<!-- select * from answer where question_id = ? -->
+<h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+<div>
+    <ul>
+        <li th:each="answer : ${question.answerList}" th:text="${answer.content}"></li>
+    </ul>
+</div>
+
+
+<form method="POST" th:action="@{|/answer/create/${question.id}|}">
+    <textarea name="content" rows="15" required></textarea>
+    <button type="submit">답변등록</button>
+</form>
