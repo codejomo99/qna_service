@@ -1,5 +1,7 @@
 package com.exam.qna.controller;
 
+import com.exam.qna.dto.AnswerForm;
+import com.exam.qna.dto.QuestionForm;
 import com.exam.qna.entity.Question;
 import com.exam.qna.service.QuestionService;
 import jakarta.validation.Valid;

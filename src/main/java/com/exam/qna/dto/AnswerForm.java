@@ -1,4 +1,4 @@
-package com.exam.qna.controller;
+package com.exam.qna.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
