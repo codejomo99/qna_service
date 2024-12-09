@@ -8,6 +8,7 @@ import com.exam.qna.entity.Question;
 import com.exam.qna.repository.QuestionRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,21 @@ public class QuestionRepositoryTests {
         questionRepository.save(q2);  // 두번째 질문 저장
 
         return lastSampleDataId = q2.getId();
+    }
+
+    @Test
+    public void createManyData(){
+
+        boolean run = true;
+        if(run == false) return;
+
+        IntStream.rangeClosed(3,300).forEach(id -> {
+            Question q = new Question();
+            q.setSubject("%d번 질문".formatted(id));
+            q.setContent("%d번 질문의 내용".formatted(id));
+            q.setCreateDate(LocalDateTime.now());
+            questionRepository.save(q);
+        });
     }
 
     // 전역으로 사용 할 수 있는 static
