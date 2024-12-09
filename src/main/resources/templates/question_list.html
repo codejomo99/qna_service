@@ -10,7 +10,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="question, loop : ${questionList}">
+        <tr th:each="question, loop : ${paging}">
             <td>
                 <!-- [[${loop.index}]] / [[${loop.size}]]-->
                 [[${loop.count}]]

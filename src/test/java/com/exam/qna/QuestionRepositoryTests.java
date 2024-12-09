@@ -13,6 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @SpringBootTest
 public class QuestionRepositoryTests {
@@ -45,20 +48,7 @@ public class QuestionRepositoryTests {
         return lastSampleDataId = q2.getId();
     }
 
-    @Test
-    public void createManyData(){
 
-        boolean run = true;
-        if(run == false) return;
-
-        IntStream.rangeClosed(3,300).forEach(id -> {
-            Question q = new Question();
-            q.setSubject("%d번 질문".formatted(id));
-            q.setContent("%d번 질문의 내용".formatted(id));
-            q.setCreateDate(LocalDateTime.now());
-            questionRepository.save(q);
-        });
-    }
 
     // 전역으로 사용 할 수 있는 static
     public static void clearData(QuestionRepository questionRepository) {
@@ -113,6 +103,29 @@ public class QuestionRepositoryTests {
         questionRepository.delete(q);
         assertEquals(1,questionRepository.count());
 
+    }
+
+    @Test
+    void Pageable(){
+        Pageable pageable = PageRequest.of(0,2);
+        Page<Question> all = questionRepository.findAll(pageable);
+        assertThat(all.getTotalPages()).isEqualTo(1);
+
+    }
+
+    @Test
+    public void createManyData(){
+
+        boolean run = true;
+        if(run == false) return;
+
+        IntStream.rangeClosed(3,300).forEach(id -> {
+            Question q = new Question();
+            q.setSubject("%d번 질문".formatted(id));
+            q.setContent("%d번 질문의 내용".formatted(id));
+            q.setCreateDate(LocalDateTime.now());
+            questionRepository.save(q);
+        });
     }
 
 }
