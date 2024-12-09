@@ -2,10 +2,12 @@ package com.exam.qna.controller;
 
 import com.exam.qna.entity.Question;
 import com.exam.qna.service.QuestionService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,27 +40,14 @@ public class QuestionController {
     }
 
     @GetMapping("/create")
-    public String questionCreate(){
+    public String questionCreate(QuestionForm questionForm){
         return "question_form";
     }
 
     @PostMapping("/create")
-    public String questionCreate(Model model, QuestionForm questionForm){
+    public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult){
 
-       boolean hasError = false;
-
-        if(questionForm.getSubject() == null || questionForm.getSubject().trim().isEmpty()){
-            model.addAttribute("subjectErrorMsg", "제목이 없어용");
-            hasError = true;
-        }
-
-        if(questionForm.getContent() == null || questionForm.getContent().trim().isEmpty()){
-            model.addAttribute("contentErrorMsg", "내용이 없어용");
-            hasError = true;
-        }
-
-        if(hasError){
-            model.addAttribute("questionForm",questionForm);
+        if(bindingResult.hasErrors()){
             return "question_form";
         }
 
