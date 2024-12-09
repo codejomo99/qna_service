@@ -1,14 +1,18 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <div layout:fragment="content" class="container">
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+
+    <div class="alert alert-danger" th:if="${subjectErrorMsg != null}" th:text="${subjectErrorMsg}"></div>
+    <div class="alert alert-danger" th:if="${contentErrorMsg != null}" th:text="${contentErrorMsg}"></div>
+
     <form th:action="@{/question/create}" method="post">
         <div class="mb-3">
             <label for="subject" class="form-label">제목</label>
-            <input type="text" name="subject" id="subject" class="form-control"  placeholder="제목을 입력해주세요">
+            <input th:value="${questionForm?.subject}" type="text" name="subject" id="subject" class="form-control"  placeholder="제목을 입력해주세요">
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
-            <textarea name="content" id="content" class="form-control" rows="10"  placeholder="내용을 입력해주세요"></textarea>
+            <textarea name="content" id="content" class="form-control" rows="10"  placeholder="내용을 입력해주세요" th:text="${questionForm?.content}"></textarea>
         </div>
         <input type="submit" value="저장하기" class="btn btn-primary my-2">
     </form>
