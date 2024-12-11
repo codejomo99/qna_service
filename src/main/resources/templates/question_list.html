@@ -11,12 +11,13 @@
         </thead>
         <tbody>
         <tr th:each="question, loop : ${paging}">
-            <td>
-                <!-- [[${loop.index}]] / [[${loop.size}]]-->
-                [[${loop.count}]]
-            </td>
+            <td th:text="${paging.getTotalElements() - (paging.number * paging.size) - loop.index}"></td>
             <td>
                 <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+                <span class="text-danger small ms-2"
+                      th:if="${#lists.size(question.answerList) > 0}"
+                      th:text="|(${#lists.size(question.answerList)})|">
+                    </span>
             </td>
             <!-- loop 방식 -->
             <!--  | 안에 |  이 사이에서는 바로 출력이 된다 !!!-->
