@@ -33,7 +33,7 @@ class AnswerRepositoryTests {
     }
 
     void createSampleData() {
-        int questId = QuestionRepositoryTests.createSampleData(questionRepository);
+        Long questId = QuestionRepositoryTests.createSampleData(questionRepository);
         Question q = questionRepository.findById(questId).get();
 
         Answer a = new Answer();
@@ -73,7 +73,7 @@ class AnswerRepositoryTests {
     @Rollback(value = false)
     void save() {
 
-        Question q = questionRepository.findById(2).get();
+        Question q = questionRepository.findById(2L).get();
 
         Answer a = new Answer();
         a.setContent("음..그러게요");
@@ -90,7 +90,7 @@ class AnswerRepositoryTests {
     @Rollback(value = false)
     void update() {
 
-        Answer a = answerRepository.findById(1).get();
+        Answer a = answerRepository.findById(1L).get();
         a.setContent("답변이 수정되었습니다.");
         answerRepository.save(a);
 
@@ -104,7 +104,7 @@ class AnswerRepositoryTests {
     void delete() {
         assertThat(answerRepository.count()).isEqualTo(2);
 
-        Answer q = answerRepository.findById(1).get();
+        Answer q = answerRepository.findById(1L).get();
 
         answerRepository.delete(q);
         assertEquals(1, answerRepository.count());
@@ -115,7 +115,7 @@ class AnswerRepositoryTests {
     @Transactional
     @Rollback(value = false)
     void find(){
-        Answer a  = answerRepository.findById(1).get();
+        Answer a  = answerRepository.findById(1L).get();
 
         assertThat(a.getContent()).isEqualTo("저도 잘 몰라요");
     }
@@ -128,7 +128,7 @@ class AnswerRepositoryTests {
     void answer으로부터_관련된_질문_조회(){
 
         // 답변으로 부터 질문을 찾는다.
-        Answer a  = answerRepository.findById(1).get();
+        Answer a  = answerRepository.findById(1L).get();
         Question q = a.getQuestion();
 
         assertThat(q.getId()).isEqualTo(2);
@@ -144,7 +144,7 @@ class AnswerRepositoryTests {
     void question으로부터_관련된_답변들_조회(){
 
         // Error : failed to lazily initialize a collection of role
-        Question q = questionRepository.findById(2).get();
+        Question q = questionRepository.findById(2L).get();
         // 중간에 Question DB 연결이 끊킨다.
 
 

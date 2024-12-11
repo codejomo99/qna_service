@@ -20,7 +20,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private Integer id;
+    private Long id;
     @Column(length = 200)
     private String subject;
 

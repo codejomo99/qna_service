@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Question,  Integer>, RepositoryUtil {
+public interface QuestionRepository extends JpaRepository<Question,  Long>, RepositoryUtil {
 
 
 
