@@ -24,7 +24,11 @@ public class SecurityConfig {
                         .permitAll()) // 허용한다
                 .formLogin((formLogin) -> formLogin
                     .loginPage("/user/login")
-                    .defaultSuccessUrl("/"));
+                    .defaultSuccessUrl("/"))
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true));
 
 
         return http.build();
