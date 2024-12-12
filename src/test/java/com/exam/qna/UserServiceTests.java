@@ -35,7 +35,7 @@ public class UserServiceTests {
     private void createSampleData(){
         createSampleData(userService);
     }
-    private void createSampleData(SiteUserService userService){
+    public static void createSampleData(SiteUserService userService){
         userService.create("admin","admin@test.com", "1234");
         userService.create("user1","user@test.com","1234");
     }
@@ -44,10 +44,13 @@ public class UserServiceTests {
         clearData(userRepository, answerRepository,questionRepository);
     }
 
-    private void clearData(SiteUserRepository userRepository, AnswerRepository answerRepository, QuestionRepository questionRepository) {
-        AnswerRepositoryTests.clearData(answerRepository,questionRepository);
+    public static void clearData(SiteUserRepository userRepository, AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        answerRepository.deleteAll();
+        answerRepository.truncateTable();
+        questionRepository.deleteAll();
+        questionRepository.truncateTable();
         userRepository.deleteAll();
-        userRepository.truncate();
+        userRepository.truncateTable();
     }
 
     @Test

@@ -5,7 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.exam.qna.entity.Question;
+import com.exam.qna.entity.SiteUser;
+import com.exam.qna.repository.AnswerRepository;
 import com.exam.qna.repository.QuestionRepository;
+import com.exam.qna.repository.SiteUserRepository;
+import com.exam.qna.service.SiteUserService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -23,42 +27,53 @@ public class QuestionRepositoryTests {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private AnswerRepository answerRepository;
+
+    @Autowired
+    private SiteUserRepository userRepository;
+
+    @Autowired
+    private SiteUserService userService;
+
 
     private static Long lastSampleDataId;
 
     @BeforeEach
     void beforeEach(){
-        QuestionRepositoryTests.clearData(questionRepository);
-        QuestionRepositoryTests.createSampleData(questionRepository);
+        clearData();
+        createSampleData();
     }
 
-    public static Long createSampleData(QuestionRepository questionRepository) {
+    public static long createSampleData(SiteUserService userService, QuestionRepository questionRepository) {
+        UserServiceTests.createSampleData(userService);
+
         Question q1 = new Question();
         q1.setSubject("이게 무엇인가요?");
         q1.setContent("이것에 대해서 알고 싶습니다.");
+        q1.setAuthor(new SiteUser(2L));
         q1.setCreateDate(LocalDateTime.now());
         questionRepository.save(q1);  // 첫번째 질문 저장
 
         Question q2 = new Question();
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
+        q2.setAuthor(new SiteUser(2L));
         q2.setCreateDate(LocalDateTime.now());
         questionRepository.save(q2);  // 두번째 질문 저장
 
         return lastSampleDataId = q2.getId();
     }
 
+    public void createSampleData(){
+        lastSampleDataId = createSampleData(userService,questionRepository);
+    }
 
-
-    // 전역으로 사용 할 수 있는 static - (질문을 삭제)
-    public static void clearData(QuestionRepository questionRepository) {
-        //questionRepository.disableForeignKeyChecks();
-        // delete -> ALTER TABLE question AUTO_INCREMENT = 1; 바꾼다.
-        questionRepository.deleteAll();
-        // 초기화
-        questionRepository.truncate();
-        // 외래키를 다시 만든다
-       // questionRepository.enableForeignKeyChecks();
+    private void clearData(){
+        clearData(userRepository, answerRepository,questionRepository);
+    }
+    public static void clearData(SiteUserRepository userRepository, AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        UserServiceTests.clearData(userRepository,answerRepository,questionRepository);
     }
 
     // save
@@ -70,12 +85,14 @@ public class QuestionRepositoryTests {
         Question q1 = new Question();
         q1.setSubject("이게 무엇인가요?");
         q1.setContent("이것에 대해서 알고 싶습니다.");
+        q1.setAuthor(new SiteUser(2L));
         q1.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q1);  // 세번째 질문 저장
 
         Question q2 = new Question();
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
+        q2.setAuthor(new SiteUser(2L));
         q2.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q2);  // 네번째 질문 저장
 
@@ -124,6 +141,7 @@ public class QuestionRepositoryTests {
             q.setSubject("%d번 질문".formatted(id));
             q.setContent("%d번 질문의 내용".formatted(id));
             q.setCreateDate(LocalDateTime.now());
+            q.setAuthor(new SiteUser(2L));
             questionRepository.save(q);
         });
     }

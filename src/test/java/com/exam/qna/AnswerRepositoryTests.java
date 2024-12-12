@@ -5,8 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.exam.qna.entity.Answer;
 import com.exam.qna.entity.Question;
+import com.exam.qna.entity.SiteUser;
 import com.exam.qna.repository.AnswerRepository;
 import com.exam.qna.repository.QuestionRepository;
+import com.exam.qna.repository.SiteUserRepository;
+import com.exam.qna.service.SiteUserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +27,11 @@ class AnswerRepositoryTests {
 
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private SiteUserRepository userRepository;
+
+    @Autowired
+    private SiteUserService userService;
 
 
     @BeforeEach
@@ -33,12 +41,13 @@ class AnswerRepositoryTests {
     }
 
     void createSampleData() {
-        Long questId = QuestionRepositoryTests.createSampleData(questionRepository);
+        Long questId = QuestionRepositoryTests.createSampleData(userService,questionRepository);
         Question q = questionRepository.findById(questId).get();
 
         Answer a = new Answer();
         a.setContent("저도 잘 몰라요");
         a.setCreateDate(LocalDateTime.now());
+        a.setAuthor(new SiteUser(1L));
         // 답변객체를 질문에 담아준다. (양방향 관계)
         q.addAnswer(a);
         answerRepository.save(a);
@@ -48,6 +57,7 @@ class AnswerRepositoryTests {
         a1.setContent("아 저는 알아요");
         a1.setCreateDate(LocalDateTime.now());
         // 답변객체를 질문에 담아준다. (양방향 관계)
+        a1.setAuthor(new SiteUser(2L));
         q.addAnswer(a1);
         answerRepository.save(a1);
 
@@ -56,22 +66,12 @@ class AnswerRepositoryTests {
     }
 
     private void clearData(){
-        clearData(answerRepository,questionRepository);
+        clearData(userRepository, answerRepository,questionRepository);
     }
 
-    public static void clearData(AnswerRepository answerRepository, QuestionRepository questionRepository) {
-        // 1. 질문을 삭제를 한다.
-        QuestionRepositoryTests.clearData(questionRepository);
+    public static void clearData(SiteUserRepository userRepository, AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        UserServiceTests.clearData(userRepository, answerRepository, questionRepository);
 
-        // 2. 답변을 삭제를 한다.
-        // 질문 외래키 삭제
-        //answerRepository.disableForeignKeyChecks();
-        // Delete -> ALTER TABLE answer AUTO_INCREMENT = 1; 바꾼다.
-        answerRepository.deleteAll();
-        // 답변 초기화
-        answerRepository.truncate();
-        // 질문 외래키 다시 만든다
-        //answerRepository.enableForeignKeyChecks();
     }
 
     // save
@@ -85,6 +85,7 @@ class AnswerRepositoryTests {
         Answer a = new Answer();
         a.setContent("음..그러게요");
         a.setCreateDate(LocalDateTime.now());
+        a.setAuthor(new SiteUser(2L));
         q.addAnswer(a);
 
         // CascadeType.ALL 을 적용해서 조금 더 객체지향적으로
@@ -114,7 +115,7 @@ class AnswerRepositoryTests {
         Answer q = answerRepository.findById(1L).get();
 
         answerRepository.delete(q);
-        assertEquals(1, answerRepository.count());
+        assertEquals(2, answerRepository.count());
 
     }
 
