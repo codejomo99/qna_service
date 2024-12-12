@@ -19,7 +19,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(new AntPathRequestMatcher("/**")) // 모든 경로를
-                        .permitAll()); // 허용한다
+                        .permitAll()) // 허용한다
+                .formLogin((formLogin) -> formLogin
+                    .loginPage("/user/login")
+                    .defaultSuccessUrl("/"));
 
 
         return http.build();
