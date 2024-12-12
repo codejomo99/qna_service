@@ -24,7 +24,7 @@ public class QuestionRepositoryTests {
     private QuestionRepository questionRepository;
 
 
-    private static int lastSampleDataId;
+    private static Long lastSampleDataId;
 
     @BeforeEach
     void beforeEach(){
@@ -32,7 +32,7 @@ public class QuestionRepositoryTests {
         QuestionRepositoryTests.createSampleData(questionRepository);
     }
 
-    public static int createSampleData(QuestionRepository questionRepository) {
+    public static Long createSampleData(QuestionRepository questionRepository) {
         Question q1 = new Question();
         q1.setSubject("이게 무엇인가요?");
         q1.setContent("이것에 대해서 알고 싶습니다.");
@@ -86,11 +86,11 @@ public class QuestionRepositoryTests {
     // update
     @Test
     void update(){
-        Question q = questionRepository.findById(1).get();
+        Question q = questionRepository.findById(1L).get();
         q.setSubject("수정되었습니다.");
         questionRepository.save(q);
 
-        q = questionRepository.findById(1).get();
+        q = questionRepository.findById(1L).get();
         assertEquals("수정되었습니다.",q.getSubject());
     }
 
@@ -98,7 +98,7 @@ public class QuestionRepositoryTests {
     @Test
     void delete(){
         assertThat(questionRepository.count()).isEqualTo(lastSampleDataId);
-        Question q = questionRepository.findById(1).get();
+        Question q = questionRepository.findById(1L).get();
 
         questionRepository.delete(q);
         assertEquals(1,questionRepository.count());
