@@ -14,4 +14,6 @@ public interface SiteUserRepository extends JpaRepository<SiteUser, Long> {
     @Modifying
     @Query(value = "ALTER TABLE site_user AUTO_INCREMENT = 1;", nativeQuery = true)
     void resetIncrement();
+
+    boolean existsByUsername(String username);
 }

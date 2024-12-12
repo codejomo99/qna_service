@@ -1,8 +1,11 @@
 package com.exam.qna.service;
 
 import com.exam.qna.entity.SiteUser;
+import com.exam.qna.error.SignupEmailDuplicatedException;
+import com.exam.qna.error.SignupUsernameDuplicatedException;
 import com.exam.qna.repository.SiteUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,7 @@ public class SiteUserService {
     // 의존성 주입을 통해 PasswordEncoder 객체를 스프링이 관리
     private final PasswordEncoder passwordEncoder;
 
-    public SiteUser create(String username, String email, String password) {
+    public SiteUser create(String username, String email, String password) throws SignupUsernameDuplicatedException, SignupEmailDuplicatedException{
         SiteUser user = new SiteUser();
         user.setUsername(username);
         user.setEmail(email);
@@ -24,7 +27,19 @@ public class SiteUserService {
         // 암호화
         // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(password));
-        this.siteUserRepository.save(user);
+
+        try{
+            siteUserRepository.save(user);
+        }catch (DataIntegrityViolationException e){
+
+            if(siteUserRepository.existsByUsername(username)){
+                throw new SignupUsernameDuplicatedException("이미 사용중인 이름입니다.");
+            }else{
+                throw new SignupEmailDuplicatedException("이미 사용중인 Email 입니다.");
+            }
+        }
+
+
         return user;
     }
 }
