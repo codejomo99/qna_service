@@ -3,8 +3,11 @@ package com.exam.qna.controller;
 import com.exam.qna.dto.AnswerForm;
 import com.exam.qna.dto.QuestionForm;
 import com.exam.qna.entity.Question;
+import com.exam.qna.entity.SiteUser;
 import com.exam.qna.service.QuestionService;
+import com.exam.qna.service.SiteUserService;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -23,6 +26,7 @@ public class QuestionController {
 
     // @Autowired // <- 필드 주입
     private final QuestionService questionService;
+    private final SiteUserService userService;
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
         Page<Question> paging = questionService.getList(page);
@@ -48,13 +52,15 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult){
+    public String questionCreate(Principal principal, @Valid QuestionForm questionForm, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
             return "question_form";
         }
 
-        questionService.create(questionForm.getSubject(), questionForm.getContent());
+        SiteUser siteUser = userService.getUser(principal.getName());
+
+        questionService.create(questionForm.getSubject(), questionForm.getContent(),siteUser);
         return "redirect:/question/list";
     }
 }

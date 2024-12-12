@@ -1,6 +1,7 @@
 package com.exam.qna.service;
 
 import com.exam.qna.entity.SiteUser;
+import com.exam.qna.error.DataNotFoundException;
 import com.exam.qna.error.SignupEmailDuplicatedException;
 import com.exam.qna.error.SignupUsernameDuplicatedException;
 import com.exam.qna.repository.SiteUserRepository;
@@ -19,7 +20,8 @@ public class SiteUserService {
     // 의존성 주입을 통해 PasswordEncoder 객체를 스프링이 관리
     private final PasswordEncoder passwordEncoder;
 
-    public SiteUser create(String username, String email, String password) throws SignupUsernameDuplicatedException, SignupEmailDuplicatedException{
+    public SiteUser create(String username, String email, String password)
+            throws SignupUsernameDuplicatedException, SignupEmailDuplicatedException {
         SiteUser user = new SiteUser();
         user.setUsername(username);
         user.setEmail(email);
@@ -28,18 +30,23 @@ public class SiteUserService {
         // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(password));
 
-        try{
+        try {
             siteUserRepository.save(user);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
 
-            if(siteUserRepository.existsByUsername(username)){
+            if (siteUserRepository.existsByUsername(username)) {
                 throw new SignupUsernameDuplicatedException("이미 사용중인 이름입니다.");
-            }else{
+            } else {
                 throw new SignupEmailDuplicatedException("이미 사용중인 Email 입니다.");
             }
         }
 
-
         return user;
+    }
+
+    public SiteUser getUser(String name) {
+        return siteUserRepository.findByUsername(name).orElseThrow(() ->
+                new DataNotFoundException("user not found")
+        );
     }
 }

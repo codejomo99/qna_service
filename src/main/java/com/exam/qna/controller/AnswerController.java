@@ -2,9 +2,12 @@ package com.exam.qna.controller;
 
 import com.exam.qna.dto.AnswerForm;
 import com.exam.qna.entity.Question;
+import com.exam.qna.entity.SiteUser;
 import com.exam.qna.service.AnswerService;
 import com.exam.qna.service.QuestionService;
+import com.exam.qna.service.SiteUserService;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +23,10 @@ public class AnswerController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
+    private final SiteUserService userService;
 
     @PostMapping("/create/{id}")
-    public String createAnswer(Model model, @PathVariable Long id, @Valid AnswerForm answerForm, BindingResult bindingResult){
+    public String createAnswer(Principal principal, Model model, @PathVariable Long id, @Valid AnswerForm answerForm, BindingResult bindingResult){
 
         Question question = questionService.getQuestion(id);
 
@@ -31,7 +35,9 @@ public class AnswerController {
             return "question_detail";
         }
 
-        answerService.create(question,answerForm.getContent());
+        SiteUser siteUser = userService.getUser(principal.getName());
+
+        answerService.create(question,answerForm.getContent(),siteUser);
 
         return String.format("redirect:/question/detail/%s",id);
     }
