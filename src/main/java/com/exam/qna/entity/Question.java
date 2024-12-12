@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class Question {
     // ALL : 부모엔티티에 관련된 데이터가 저장될때 자식 엔티티도 저장을 할까 ?
     @OneToMany(mappedBy = "question", cascade = {CascadeType.REMOVE, CascadeType.ALL})
     private List<Answer> answerList = new ArrayList<>();
+
+    @ManyToOne
+    private SiteUser author;
 
     public void addAnswer(Answer answer){
         answer.setQuestion(this);

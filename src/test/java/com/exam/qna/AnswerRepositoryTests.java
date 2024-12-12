@@ -55,8 +55,15 @@ class AnswerRepositoryTests {
         questionRepository.save(q);
     }
 
-    void clearData() {
+    private void clearData(){
+        clearData(answerRepository,questionRepository);
+    }
+
+    public static void clearData(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        // 1. 질문을 삭제를 한다.
         QuestionRepositoryTests.clearData(questionRepository);
+
+        // 2. 답변을 삭제를 한다.
         // 질문 외래키 삭제
         //answerRepository.disableForeignKeyChecks();
         // Delete -> ALTER TABLE answer AUTO_INCREMENT = 1; 바꾼다.

@@ -26,4 +26,7 @@ public class Answer {
     @ManyToOne
 //    @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)) // 외래키 제거
     private Question question;
+
+    @ManyToOne
+    private SiteUser author;
 }

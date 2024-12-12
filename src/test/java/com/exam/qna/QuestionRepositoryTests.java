@@ -50,7 +50,7 @@ public class QuestionRepositoryTests {
 
 
 
-    // 전역으로 사용 할 수 있는 static
+    // 전역으로 사용 할 수 있는 static - (질문을 삭제)
     public static void clearData(QuestionRepository questionRepository) {
         //questionRepository.disableForeignKeyChecks();
         // delete -> ALTER TABLE question AUTO_INCREMENT = 1; 바꾼다.

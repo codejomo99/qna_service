@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SiteUserRepository extends JpaRepository<SiteUser, Long> {
+public interface SiteUserRepository extends JpaRepository<SiteUser, Long> ,RepositoryUtil {
 
     @Transactional
     @Modifying
     @Query(value = "ALTER TABLE site_user AUTO_INCREMENT = 1;", nativeQuery = true)
-    void resetIncrement();
+    void truncate();
 
     boolean existsByUsername(String username);
 
-    Optional<SiteUser> findByusername(String username);
+    Optional<SiteUser> findByUsername(String username);
 }
