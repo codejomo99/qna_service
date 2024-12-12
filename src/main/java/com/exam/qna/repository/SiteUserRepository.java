@@ -2,6 +2,7 @@ package com.exam.qna.repository;
 
 import com.exam.qna.entity.SiteUser;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,6 @@ public interface SiteUserRepository extends JpaRepository<SiteUser, Long> {
     void resetIncrement();
 
     boolean existsByUsername(String username);
+
+    Optional<SiteUser> findByusername(String username);
 }
