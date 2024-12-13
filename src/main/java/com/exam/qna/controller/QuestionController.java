@@ -31,42 +31,43 @@ public class QuestionController {
     // @Autowired // <- 필드 주입
     private final QuestionService questionService;
     private final SiteUserService userService;
+
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue = "0") int page){
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
         Page<Question> paging = questionService.getList(page);
 
         // 미리 실행된 question_list.html 에서
         // questionList 라는 이름으로 questionList 변수를 사용 할 수 있다.
-        model.addAttribute("paging",paging);
+        model.addAttribute("paging", paging);
         return "question_list";
     }
 
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable Long id, AnswerForm answerForm){
+    public String detail(Model model, @PathVariable Long id, AnswerForm answerForm) {
         Question question = questionService.getQuestion(id);
 
-        model.addAttribute("question",question);
+        model.addAttribute("question", question);
 
         return "question_detail";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String questionCreate(QuestionForm questionForm){
+    public String questionCreate(QuestionForm questionForm) {
         return "question_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String questionCreate(Principal principal, @Valid QuestionForm questionForm, BindingResult bindingResult){
+    public String questionCreate(Principal principal, @Valid QuestionForm questionForm, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "question_form";
         }
 
         SiteUser siteUser = userService.getUser(principal.getName());
 
-        questionService.create(questionForm.getSubject(), questionForm.getContent(),siteUser);
+        questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
         return "redirect:/question/list";
     }
 
@@ -75,11 +76,11 @@ public class QuestionController {
     public String questionModify(QuestionForm questionForm, @PathVariable("id") Long id, Principal principal) {
         Question question = this.questionService.getQuestion(id);
 
-        if(question == null){
+        if (question == null) {
             throw new DataNotFoundException("%d번 질문은 존재하지 않습니다.".formatted(id));
         }
 
-        if(!question.getAuthor().getUsername().equals(principal.getName())) {
+        if (!question.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         questionForm.setSubject(question.getSubject());

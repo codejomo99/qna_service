@@ -77,6 +77,4 @@ public class AnswerController {
         return String.format("redirect:/question/detail/%s",answer.getQuestion().getId());
 
     }
-
-
 }
