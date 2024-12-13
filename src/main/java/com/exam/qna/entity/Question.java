@@ -28,6 +28,7 @@ public class Question {
     @Column(columnDefinition = "TEXT") // 본문
     private String content;
     private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
 
 
     // ALL : 부모엔티티에 관련된 데이터가 저장될때 자식 엔티티도 저장을 할까 ?
