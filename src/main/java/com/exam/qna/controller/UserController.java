@@ -30,7 +30,7 @@ public class UserController {
             return "signup_form";
         }
 
-        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+        if (!userCreateForm.getPassword().equals(userCreateForm.getPasswordConfirm())) {
             bindingResult.rejectValue("password2", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
             return "signup_form";
@@ -39,7 +39,7 @@ public class UserController {
         // 중복된 유저 처리
         try {
             userService.create(userCreateForm.getUsername(),
-                    userCreateForm.getEmail(), userCreateForm.getPassword1());
+                    userCreateForm.getEmail(), userCreateForm.getPassword());
         } catch (SignupUsernameDuplicatedException e) {
             bindingResult.reject("signupUsernameFailed", e.getMessage());
             return "signup_form";
