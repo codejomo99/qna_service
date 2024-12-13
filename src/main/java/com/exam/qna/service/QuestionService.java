@@ -1,6 +1,7 @@
 package com.exam.qna.service;
 
 import com.exam.qna.entity.Question;
+import com.exam.qna.entity.SiteUser;
 import com.exam.qna.error.DataNotFoundException;
 import com.exam.qna.repository.QuestionRepository;
 import java.time.LocalDateTime;
@@ -18,24 +19,25 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    public Page<Question> getList(int page){
+    public Page<Question> getList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         sorts.add(Sort.Order.desc("id"));
 
-        Pageable pageable = PageRequest.of(page,10,Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return questionRepository.findAll(pageable);
     }
 
     public Question getQuestion(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(()-> new DataNotFoundException("no %d question not fund".formatted(id)));
+                .orElseThrow(() -> new DataNotFoundException("no %d question not fund".formatted(id)));
     }
 
-    public void create(String subject, String content) {
+    public void create(String subject, String content, SiteUser author) {
         Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
+        q.setAuthor(author);
         q.setCreateDate(LocalDateTime.now());
         questionRepository.save(q);
     }
