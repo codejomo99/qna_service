@@ -2,26 +2,20 @@
 
 ## **📌 사용된 기술 스택**
 ### **Backend**
-- **Java**  
-  객체지향 프로그래밍을 위한 핵심 언어
-- **Spring Boot**  
-  RESTful API 및 웹 애플리케이션 개발
-- **JPA**  
-  ORM(Object-Relational Mapping)을 통한 데이터 관리
-- **Spring Security**  
-  인증 및 권한 관리로 안전한 웹 서비스 구축
+- **Java**
+- **Spring Boot**
+- **JPA**
+- **Spring Security**
 
 ### **Frontend**
-- **Thymeleaf**  
-  서버 사이드 렌더링을 위한 템플릿 엔진
-- **HTML, CSS, JavaScript**  
-  사용자 인터페이스 구성 및 동적 동작 구현
+- **Thymeleaf**
+- **HTML, CSS, JavaScript**
 
 ### **Database**
 - **MySQL**  
-  관계형 데이터베이스를 이용한 데이터 저장
 
----
+
+##
 
 ## **✅ 구현된 기능**
 ### **1. 질문 기능**
@@ -47,7 +41,7 @@
 - **로그인/로그아웃**
     - 인증 및 권한 관리를 통한 보안 유지
 
----
+##
 
 ## **🚀 남은 목표**
 - [ ] **마크다운 적용**
