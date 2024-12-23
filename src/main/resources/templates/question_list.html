@@ -1,18 +1,19 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <div layout:fragment="content" class="container my-3">
     <h2>질문 리스트</h2>
-    <table class="table">
+    <table class="table text-center">
         <thead class="table-dark">
         <tr>
             <th>번호</th>
-            <th>제목</th>
+            <th style="width:50%;">제목</th>
+            <th>글쓴이</th>
             <th>작성일시</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="question, loop : ${paging}">
             <td th:text="${paging.getTotalElements() - (paging.number * paging.size) - loop.index}"></td>
-            <td>
+            <td class="text-start">
                 <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <span class="text-danger small ms-2"
                       th:if="${#lists.size(question.answerList) > 0}"
@@ -26,6 +27,7 @@
 <!--            </td>-->
             <!-- th 방식 -->
             <!--  <td th:text = "${#strings.substring(question.createDate,2,10)}"></td> -->
+            <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
             <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 
 

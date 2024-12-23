@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +30,7 @@ public class Question {
     @Column(columnDefinition = "TEXT") // 본문
     private String content;
     private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
 
 
     // ALL : 부모엔티티에 관련된 데이터가 저장될때 자식 엔티티도 저장을 할까 ?
@@ -41,4 +44,7 @@ public class Question {
         answer.setQuestion(this);
         getAnswerList().add(answer);
     }
+
+    @ManyToMany
+    Set<SiteUser> voter;
 }
