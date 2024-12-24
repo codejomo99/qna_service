@@ -19,13 +19,19 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    public Page<Question> getList(int page) {
+    public Page<Question> getList(String kw, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         sorts.add(Sort.Order.desc("id"));
 
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return questionRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); // 10 페이지
+
+
+        if(kw == null || kw.trim().isEmpty()){
+            return questionRepository.findAll(pageable);
+        }
+
+        return questionRepository.findBySubjectContains(kw, pageable);
     }
 
     public Question getQuestion(Long id) {
