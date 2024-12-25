@@ -1,5 +1,19 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <div layout:fragment="content" class="container my-3">
+    <div class="row my-3">
+        <div class="col-6 d-flex justify-content-end">
+
+            <form class="input-group">
+                <input type="text" name="kw" class="form-control" th:value="${param.kw}" placeholder="검색어를 입력해주세요">
+                <button class="btn btn-outline-secondary" type="submit" id="btn_search" style="margin-top: 0;">찾기</button>
+
+<!--                <select class="form-select" name="sortCode" th:value="${param.sortCode}">-->
+<!--                    <option value="NEW">최신순</option>-->
+<!--                    <option value="OLD">오래된순</option>-->
+<!--                </select>-->
+            </form>
+        </div>
+    </div>
     <h2>질문 리스트</h2>
     <table class="table text-center">
         <thead class="table-dark">
@@ -12,7 +26,7 @@
         </thead>
         <tbody>
         <tr th:each="question, loop : ${paging}">
-            <td th:text="${paging.getTotalElements() - (paging.number * paging.size) - loop.index}"></td>
+            <td th:text="${question.id}"></td>
             <td class="text-start">
                 <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <span class="text-danger small ms-2"
@@ -20,13 +34,6 @@
                       th:text="|(${#lists.size(question.answerList)})|">
                     </span>
             </td>
-            <!-- loop 방식 -->
-            <!--  | 안에 |  이 사이에서는 바로 출력이 된다 !!!-->
-<!--            <td>-->
-<!--                [[|${#strings.substring(question.createDate,2,10)}분|]]-->
-<!--            </td>-->
-            <!-- th 방식 -->
-            <!--  <td th:text = "${#strings.substring(question.createDate,2,10)}"></td> -->
             <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
             <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
 
@@ -39,7 +46,7 @@
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{|?page=${paging.number-1}|}">
+                   th:href="@{|?page=${paging.number-1}&kw=${kw}|}">
                     <span>이전</span>
                 </a>
             </li>
@@ -50,7 +57,7 @@
                 <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
             </li>
             <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                <a class="page-link" th:href="@{|?page=${paging.number+1}&kw=${kw}|}">
                     <span>다음</span>
                 </a>
             </li>
