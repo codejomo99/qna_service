@@ -67,7 +67,7 @@ public class AnswerController {
     public String answerModify(Principal principal,@PathVariable Long id, @Valid AnswerForm answerForm, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
-            return "ansewr_form";
+            return "answer_form";
         }
         Answer answer = answerService.getAnswer(id);
         if(!answer.getAuthor().getUsername().equals(principal.getName())){
