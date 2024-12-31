@@ -141,6 +141,7 @@ public class QuestionRepositoryTests {
             q.setSubject("%d번 질문".formatted(id));
             q.setContent("%d번 질문의 내용".formatted(id));
             q.setCreateDate(LocalDateTime.now());
+            q.setIsNotice(false);
             q.setAuthor(new SiteUser(2L));
             questionRepository.save(q);
         });
