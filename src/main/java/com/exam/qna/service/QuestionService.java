@@ -21,6 +21,7 @@ public class QuestionService {
 
     public Page<Question> getList(String kw, String searchType, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("isNotice"));
         sorts.add(Sort.Order.desc("createDate"));
         sorts.add(Sort.Order.desc("id"));
 
@@ -48,10 +49,17 @@ public class QuestionService {
     }
 
     public void create(String subject, String content, SiteUser author) {
+
+        boolean isNotice = false;
+        if(author.getUsername().equals("admin")){
+            isNotice = true;
+        }
+
         Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
         q.setAuthor(author);
+        q.setIsNotice(isNotice);
         q.setCreateDate(LocalDateTime.now());
         questionRepository.save(q);
     }
