@@ -26,6 +26,13 @@ public class SiteUserService {
         user.setUsername(username);
         user.setEmail(email);
 
+        // 기본 역할 부여 (ROLE_USER)
+        user.addRole("ROLE_USER");
+
+        if ("admin".equals(username)) {
+            user.addRole("ROLE_ADMIN");
+        }
+
         // 암호화
         // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(password));

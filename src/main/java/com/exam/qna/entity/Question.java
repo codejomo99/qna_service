@@ -47,4 +47,7 @@ public class Question {
 
     @ManyToMany
     Set<SiteUser> voter;
+
+    @Column(name = "is_notice")
+    private Boolean isNotice = false;
 }
