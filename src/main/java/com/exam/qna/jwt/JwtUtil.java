@@ -67,7 +67,7 @@ public class JwtUtil {
 
 
     // 3. 생성된 JWT 를 Cookie 에 저장
-    public void addJwtCookie(String token, HttpServletResponse res){
+    public void addJwtToCookie(String token, HttpServletResponse res){
         try{
             token = URLEncoder.encode(token, "utf-8").replaceAll("\\+","%20");
 
