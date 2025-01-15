@@ -3,10 +3,8 @@ package com.exam.qna.controller;
 import com.exam.qna.dto.AnswerForm;
 import com.exam.qna.entity.Answer;
 import com.exam.qna.entity.Question;
-import com.exam.qna.entity.SiteUser;
 import com.exam.qna.service.AnswerService;
 import com.exam.qna.service.QuestionService;
-import com.exam.qna.service.SiteUserService;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,6 @@ public class AnswerController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
-    private final SiteUserService userService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
@@ -41,9 +38,8 @@ public class AnswerController {
             return "question_detail";
         }
 
-        SiteUser siteUser = userService.getUser(principal.getName());
 
-        Answer answer = answerService.create(question,answerForm.getContent(),siteUser);
+        Answer answer = answerService.create(question,answerForm.getContent());
 
         return String.format("redirect:/question/detail/%s#answer_%s",id,answer.getId());
     }
