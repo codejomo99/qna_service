@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.exam.qna.entity.Answer;
 import com.exam.qna.entity.Question;
-import com.exam.qna.entity.SiteUser;
+import com.exam.qna.entity.User;
 import com.exam.qna.repository.AnswerRepository;
 import com.exam.qna.repository.QuestionRepository;
 import com.exam.qna.repository.SiteUserRepository;
@@ -47,7 +47,7 @@ class AnswerRepositoryTests {
         Answer a = new Answer();
         a.setContent("저도 잘 몰라요");
         a.setCreateDate(LocalDateTime.now());
-        a.setAuthor(new SiteUser(1L));
+        a.setAuthor(new User(1L));
         // 답변객체를 질문에 담아준다. (양방향 관계)
         q.addAnswer(a);
         answerRepository.save(a);
@@ -57,7 +57,7 @@ class AnswerRepositoryTests {
         a1.setContent("아 저는 알아요");
         a1.setCreateDate(LocalDateTime.now());
         // 답변객체를 질문에 담아준다. (양방향 관계)
-        a1.setAuthor(new SiteUser(2L));
+        a1.setAuthor(new User(2L));
         q.addAnswer(a1);
         answerRepository.save(a1);
 
@@ -85,7 +85,7 @@ class AnswerRepositoryTests {
         Answer a = new Answer();
         a.setContent("음..그러게요");
         a.setCreateDate(LocalDateTime.now());
-        a.setAuthor(new SiteUser(2L));
+        a.setAuthor(new User(2L));
         q.addAnswer(a);
 
         // CascadeType.ALL 을 적용해서 조금 더 객체지향적으로

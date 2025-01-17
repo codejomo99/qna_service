@@ -26,6 +26,9 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+
+        System.out.println("Test 접근");
+
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
@@ -47,6 +50,7 @@ public class UserController {
             bindingResult.reject("signupEmailFailed", e.getMessage());
             return "signup_form";
         }
+
 
         return "redirect:/";
     }

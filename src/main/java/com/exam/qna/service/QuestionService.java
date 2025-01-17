@@ -1,7 +1,7 @@
 package com.exam.qna.service;
 
 import com.exam.qna.entity.Question;
-import com.exam.qna.entity.SiteUser;
+import com.exam.qna.entity.User;
 import com.exam.qna.error.DataNotFoundException;
 import com.exam.qna.repository.QuestionRepository;
 import java.time.LocalDateTime;
@@ -48,7 +48,7 @@ public class QuestionService {
                 .orElseThrow(() -> new DataNotFoundException("no %d question not fund".formatted(id)));
     }
 
-    public void create(String subject, String content, SiteUser author) {
+    public void create(String subject, String content, User author) {
 
         boolean isNotice = false;
         if(author.getUsername().equals("admin")){
@@ -75,8 +75,8 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    public void vote(Question question, SiteUser siteUser) {
-        question.getVoter().add(siteUser);
+    public void vote(Question question, User user) {
+        question.getVoter().add(user);
         questionRepository.save(question);
     }
 }

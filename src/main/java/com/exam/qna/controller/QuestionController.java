@@ -3,7 +3,7 @@ package com.exam.qna.controller;
 import com.exam.qna.dto.AnswerForm;
 import com.exam.qna.dto.QuestionForm;
 import com.exam.qna.entity.Question;
-import com.exam.qna.entity.SiteUser;
+import com.exam.qna.entity.User;
 import com.exam.qna.error.DataNotFoundException;
 import com.exam.qna.service.QuestionService;
 import com.exam.qna.service.SiteUserService;
@@ -67,9 +67,9 @@ public class QuestionController {
             return "question_form";
         }
 
-        SiteUser siteUser = userService.getUser(principal.getName());
+        User user = userService.getUser(principal.getName());
 
-        questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
+        questionService.create(questionForm.getSubject(), questionForm.getContent(), user);
         return "redirect:/question/list";
     }
 
@@ -124,8 +124,8 @@ public class QuestionController {
     @GetMapping("/vote/{id}")
     public String questionVote(Principal principal, @PathVariable("id") Long id) {
         Question question = questionService.getQuestion(id);
-        SiteUser siteUser = userService.getUser(principal.getName());
-        questionService.vote(question, siteUser);
+        User user = userService.getUser(principal.getName());
+        questionService.vote(question, user);
         return String.format("redirect:/question/detail/%s", id);
     }
 

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.exam.qna.entity.Question;
-import com.exam.qna.entity.SiteUser;
+import com.exam.qna.entity.User;
 import com.exam.qna.repository.AnswerRepository;
 import com.exam.qna.repository.QuestionRepository;
 import com.exam.qna.repository.SiteUserRepository;
@@ -51,14 +51,14 @@ public class QuestionRepositoryTests {
         Question q1 = new Question();
         q1.setSubject("이게 무엇인가요?");
         q1.setContent("이것에 대해서 알고 싶습니다.");
-        q1.setAuthor(new SiteUser(2L));
+        q1.setAuthor(new User(2L));
         q1.setCreateDate(LocalDateTime.now());
         questionRepository.save(q1);  // 첫번째 질문 저장
 
         Question q2 = new Question();
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
-        q2.setAuthor(new SiteUser(2L));
+        q2.setAuthor(new User(2L));
         q2.setCreateDate(LocalDateTime.now());
         questionRepository.save(q2);  // 두번째 질문 저장
 
@@ -85,14 +85,14 @@ public class QuestionRepositoryTests {
         Question q1 = new Question();
         q1.setSubject("이게 무엇인가요?");
         q1.setContent("이것에 대해서 알고 싶습니다.");
-        q1.setAuthor(new SiteUser(2L));
+        q1.setAuthor(new User(2L));
         q1.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q1);  // 세번째 질문 저장
 
         Question q2 = new Question();
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
-        q2.setAuthor(new SiteUser(2L));
+        q2.setAuthor(new User(2L));
         q2.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q2);  // 네번째 질문 저장
 
@@ -142,7 +142,7 @@ public class QuestionRepositoryTests {
             q.setContent("%d번 질문의 내용".formatted(id));
             q.setCreateDate(LocalDateTime.now());
             q.setIsNotice(false);
-            q.setAuthor(new SiteUser(2L));
+            q.setAuthor(new User(2L));
             questionRepository.save(q);
         });
     }

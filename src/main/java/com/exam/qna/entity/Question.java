@@ -38,7 +38,7 @@ public class Question {
     private List<Answer> answerList = new ArrayList<>();
 
     @ManyToOne
-    private SiteUser author;
+    private User author;
 
     public void addAnswer(Answer answer){
         answer.setQuestion(this);
@@ -46,7 +46,7 @@ public class Question {
     }
 
     @ManyToMany
-    Set<SiteUser> voter;
+    Set<User> voter;
 
     @Column(name = "is_notice")
     private Boolean isNotice = false;

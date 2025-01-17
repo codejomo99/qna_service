@@ -1,6 +1,6 @@
 package com.exam.qna.security;
 
-import com.exam.qna.entity.SiteUser;
+import com.exam.qna.entity.User;
 import com.exam.qna.entity.UserRole;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,13 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private final SiteUser user;
+    private final User user;
 
-    public UserDetailsImpl(SiteUser user) {
+    public UserDetailsImpl(User user) {
         this.user = user;
     }
 
-    public SiteUser getUser() {
+    public User getUser() {
         return user;
     }
 

@@ -31,8 +31,8 @@ public class Answer {
     private Question question;
 
     @ManyToOne
-    private SiteUser author;
+    private User author;
 
     @ManyToMany
-    Set<SiteUser> voter;
+    Set<User> voter;
 }
