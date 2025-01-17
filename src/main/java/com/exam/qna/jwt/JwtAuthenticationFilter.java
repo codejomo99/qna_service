@@ -51,6 +51,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = jwtUtil.createToken(username, role);
         jwtUtil.addJwtToCookie(token, response);
+
+
+        // 로그인 성공 후 /question_list 페이지로 리디렉션
+        response.sendRedirect("/question/list");
+
     }
 
     @Override
@@ -58,4 +63,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 실패");
         response.setStatus(401);
     }
+
+
 }

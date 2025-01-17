@@ -1,20 +1,54 @@
+<!DOCTYPE html>
 <html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <div layout:fragment="content" class="container my-3">
-    <form th:action="@{/api/user/login}" method="POST">
-        <div th:if="${param.error}">
-            <div class="alert alert-danger">
-                사용자ID 또는 비밀번호를 확인해 주세요.
-            </div>
-        </div>
+    <h2 class="mb-4">로그인</h2>
+
+    <form id="loginForm">
+        <!-- 사용자 ID 입력 -->
         <div class="mb-3">
-            <label for="username" class="form-label">사용자ID</label>
-            <input type="text" name="username" id="username" class="form-control">
+            <label for="username" class="form-label">사용자 ID</label>
+            <input type="text" name="username" id="username" class="form-control" placeholder="아이디를 입력하세요" required>
         </div>
+
+        <!-- 비밀번호 입력 -->
         <div class="mb-3">
             <label for="password" class="form-label">비밀번호</label>
-            <input type="password" name="password" id="password" class="form-control">
+            <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요" required>
         </div>
-        <button type="submit" class="btn btn-dark">로그인</button>
+
+        <!-- 로그인 버튼 -->
+        <button type="submit" class="btn btn-dark w-100">로그인</button>
     </form>
+
+    <!-- JavaScript로 JSON 데이터 전송 -->
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // 폼 기본 동작 방지
+
+            // 폼 데이터 수집
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // 서버로 JSON 데이터 전송
+                const response = await fetch('/api/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }) // JSON 변환
+                });
+
+                // 응답 처리
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    alert('로그인 실패: ' + response.statusText);
+                }
+            } catch (error) {
+                console.error('로그인 요청 중 오류 발생:', error);
+            }
+        });
+    </script>
 </div>
 </html>

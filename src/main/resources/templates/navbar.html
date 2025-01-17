@@ -1,5 +1,6 @@
 <nav th:fragment="navbarFragment" class="navbar navbar-expand-lg navbar-light bg-light border-bottom"
      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
     <div class="container-fluid">
         <a class="navbar-brand" href="/">QnA</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -9,14 +10,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
+                    <!-- 로그인 링크 -->
                     <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+                    <!-- 로그아웃 버튼, 클릭 시 logout() 호출 -->
+                    <a class="nav-link" href="javascript:void(0);" sec:authorize="isAuthenticated()" onclick="logout()">로그아웃</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/user/signup}">회원가입</a>
                 </li>
-
             </ul>
         </div>
     </div>
+
+    <script>
+        function logout() {
+            // 토큰 삭제
+            Cookies.remove('Authorization', { path: '/' });
+            // 로그아웃 후 리다이렉트
+            window.location.href = "/question/list";  // 여기에 원하는 리다이렉트 경로 추가
+        }
+    </script>
+
 </nav>
+
+<!-- logout() 함수 추가 -->
